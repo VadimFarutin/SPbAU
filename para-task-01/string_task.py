@@ -8,7 +8,11 @@
 # Example input: 'read'
 # Example output: 'reading'
 def verbing(s):
-    return
+    if len(s) >= 3:
+        if len(s) > 3 and s[-3:] == "ing":
+            return s[:-3] + "ly"
+        return s + "ing"
+    return s
 
 
 # Given a string, find the first appearance of the
@@ -20,7 +24,19 @@ def verbing(s):
 # Example input: 'This dinner is not that bad!'
 # Example output: 'This dinner is good!'
 def not_bad(s):
-    return
+    found_not = False
+    found_bad = False
+    i = 0
+    while i < len(s) - 3 and (not found_not or not found_bad):
+        if not found_not and s[i:i+3] == "not":
+            found_not = True
+            first_not = i
+        if s[i:i+3] == "bad":
+            found_bad = True
+            if found_not:
+                return s[:first_not] + "good" + s[i+3:]
+        i += 1
+    return s
 
 
 # Consider dividing a string into two halves.
