@@ -24,7 +24,7 @@ def linear_merge(lst1, lst2):
     len1 = len(lst1)
     len2 = len(lst2)
     for k in range(len1 + len2 - 2):
-        if (lst1[i] < lst2[j]):
+        if lst1[i] < lst2[j]:
             new_lst.append(lst1[i])
             i += 1
         else:
