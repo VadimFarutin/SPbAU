@@ -9,8 +9,8 @@
 # Example output: 'reading'
 def verbing(s):
     if len(s) >= 3:
-        if len(s) > 3 and s[-3:] == "ing":
-            return s[:-3] + "ly"
+        if s[-3:] == "ing":
+            return s + "ly"
         return s + "ing"
     return s
 
@@ -27,7 +27,7 @@ def not_bad(s):
     found_not = False
     found_bad = False
     i = 0
-    while i < len(s) - 3 and (not found_not or not found_bad):
+    while i <= len(s) - 3 and (not found_not or not found_bad):
         if not found_not and s[i:i+3] == "not":
             found_not = True
             first_not = i
@@ -50,4 +50,13 @@ def not_bad(s):
 # Example input: 'abcd', 'xy'
 # Example output: 'abxcdy'
 def front_back(a, b):
-    return
+    if len(a) == 0 or len(b) == 0:
+        return a + b
+    half_a = (len(a) + 1) // 2
+    half_b = (len(b) + 1) // 2
+    s = a[:half_a] + b[:half_b]
+    if len(a) > 1:
+        s += a[half_a:]
+    if len(b) > 1:
+        s += b[half_b:]
+    return s
