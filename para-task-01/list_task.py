@@ -3,6 +3,8 @@
 # Example input: [1, 2, 2, 3]
 # Example output: [1, 2, 3]
 def remove_adjacent(lst):
+    if len(lst) == 0:
+        return lst
     new_lst = [lst[0]]
     for i in range(1, len(lst)):
         if lst[i] != lst[i - 1]:
@@ -15,6 +17,10 @@ def remove_adjacent(lst):
 # Example input: [2, 4, 6], [1, 3, 5]
 # Example output: [1, 2, 3, 4, 5, 6]
 def linear_merge(lst1, lst2):
+    if len(lst1) == 0:
+        return lst2
+    if len(lst2) == 0:
+        return lst1
     new_lst = []
     i = 0
     j = 0
