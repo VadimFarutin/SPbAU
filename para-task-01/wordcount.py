@@ -30,6 +30,8 @@ print_words() and print_top().
 """
 
 import sys
+import operator
+
 
 def read_words(filename):
     words = []
@@ -37,6 +39,29 @@ def read_words(filename):
         for line in f:
             words.extend(line.split())
     return words
+
+
+def read_dict(filename, flag):
+    words = read_words(filename)
+    dict = {}
+    for i in range(len(words)):
+        dict[words[i].lower()] = dict.get(words[i].lower(), 0) + 1
+    return sorted(dict.items(), key=operator.itemgetter(flag))
+
+
+def print_words(filename):
+    dict = read_dict(filename, 0)
+    for i in range(len(dict)):
+        print(dict[i][0] + " " + str(dict[i][1]))
+    return
+
+
+def print_top(filename):
+    dict = read_dict(filename, 1)
+    for i in range(1, min(20, len(dict)) + 1):
+        print(dict[-i][0] + " " + str(dict[-i][1]))
+    return
+
 
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
