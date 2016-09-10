@@ -30,7 +30,6 @@ print_words() and print_top().
 """
 
 import sys
-import operator
 
 
 def read_words(filename):
@@ -41,30 +40,33 @@ def read_words(filename):
     return words
 
 
-def read_sorted_dict(filename, compared_item, is_reversed):
+def comparator_words(tpl):
+    return tpl[0]
+
+
+def comparator_top(tpl):
+    return -tpl[1]
+
+
+def read_sorted_dict(filename, comparator):
     words = read_words(filename)
     dict = {}
     for word in words:
         dict[word.lower()] = dict.get(word.lower(), 0) + 1
-    return sorted(dict.items(), key=operator.itemgetter(compared_item), reverse=is_reversed)
+    return sorted(dict.items(), key=comparator)
 
 
-def print_dict(dict, size=None):
-    if size is None:
-        size = len(dict)
-    for (item, i) in zip(dict, range(size)):
+def print_dict(dict):
+    for item in dict:
         print(item[0] + " " + str(item[1]))
-    return
 
 
 def print_words(filename):
-    print_dict(read_sorted_dict(filename, 0, False))
-    return
+    print_dict(read_sorted_dict(filename, comparator_words)[:])
 
 
 def print_top(filename):
-    print_dict(read_sorted_dict(filename, 1, True), 20)
-    return
+    print_dict(read_sorted_dict(filename, comparator_top)[:20])
 
 
 # Define print_words(filename) and print_top(filename) functions.
