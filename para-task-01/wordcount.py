@@ -41,25 +41,29 @@ def read_words(filename):
     return words
 
 
-def read_dict(filename, flag):
+def read_sorted_dict(filename, compared_item, is_reversed):
     words = read_words(filename)
     dict = {}
-    for i in range(len(words)):
-        dict[words[i].lower()] = dict.get(words[i].lower(), 0) + 1
-    return sorted(dict.items(), key=operator.itemgetter(flag))
+    for word in words:
+        dict[word.lower()] = dict.get(word.lower(), 0) + 1
+    return sorted(dict.items(), key=operator.itemgetter(compared_item), reverse=is_reversed)
+
+
+def print_dict(dict, size=None):
+    if size is None:
+        size = len(dict)
+    for (item, i) in zip(dict, range(size)):
+        print(item[0] + " " + str(item[1]))
+    return
 
 
 def print_words(filename):
-    dict = read_dict(filename, 0)
-    for i in range(len(dict)):
-        print(dict[i][0] + " " + str(dict[i][1]))
+    print_dict(read_sorted_dict(filename, 0, False))
     return
 
 
 def print_top(filename):
-    dict = read_dict(filename, 1)
-    for i in range(1, min(20, len(dict)) + 1):
-        print(dict[-i][0] + " " + str(dict[-i][1]))
+    print_dict(read_sorted_dict(filename, 1, True), 20)
     return
 
 
