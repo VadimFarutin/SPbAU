@@ -24,20 +24,12 @@ def verbing(s):
 # Example input: 'This dinner is not that bad!'
 # Example output: 'This dinner is good!'
 def not_bad(s):
-    found_not = False
-    found_bad = False
-    i = 0
-    while i <= len(s) - 3 and (not found_not or not found_bad):
-        if not found_not and s[i:i+3] == "not":
-            found_not = True
-            first_not = i
-        if s[i:i+3] == "bad":
-            found_bad = True
-            if found_not:
-                return s[:first_not] + "good" + s[i+3:]
-        i += 1
+    first_not = s.find("not")
+    if first_not != -1:
+        first_bad = s.find("bad", first_not + 3)
+        if first_bad != -1:
+            return s[:first_not] + "good" + s[first_bad+3:]
     return s
-
 
 # Consider dividing a string into two halves.
 # If the length is even, the front and back halves are the same length.
@@ -50,13 +42,7 @@ def not_bad(s):
 # Example input: 'abcd', 'xy'
 # Example output: 'abxcdy'
 def front_back(a, b):
-    if len(a) == 0 or len(b) == 0:
-        return a + b
     half_a = (len(a) + 1) // 2
     half_b = (len(b) + 1) // 2
-    s = a[:half_a] + b[:half_b]
-    if len(a) > 1:
-        s += a[half_a:]
-    if len(b) > 1:
-        s += b[half_b:]
+    s = a[:half_a] + b[:half_b] + a[half_a:] + b[half_b:]
     return s
