@@ -89,6 +89,4 @@ ENV/
 .ropeproject
 
 # PyCharm files
-.xml
-.iml
-.name
+.idea/
