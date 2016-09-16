@@ -16,15 +16,12 @@ def duplicate_search(directory_name):
                 digest.update(byte)
         return digest.hexdigest()
 
-    def is_symlink(path):
-        return stat.S_ISLNK(os.stat(path, follow_symlinks=False).st_mode)
-
     def make_hashes(directory_name):
         hash_dict = {}
         for root, _, files in os.walk(directory_name):
             for name in files:
                 path = os.path.join(root, name)
-                if name[0] != '.' and name[0] != '~' and not is_symlink(path):
+                if name[0] != '.' and name[0] != '~' and not os.path.islink(path):
                     hash = md5(path)
                     hash_dict[hash] = hash_dict.get(hash, [])
                     hash_dict[hash].append(path.replace(directory_name, "")[1:])
