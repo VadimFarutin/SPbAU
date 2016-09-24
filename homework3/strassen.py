@@ -8,8 +8,7 @@ def zero_matrix(side_size):
 def read_square_matrix(destination_matrix, side_size):
     for i in range(side_size):
         line = input().split()
-        for j in range(side_size):
-            destination_matrix[i][j] = int(line[j])
+        destination_matrix[i, :side_size] = line
 
 
 def print_matrix(matrix):
