@@ -5,10 +5,11 @@ def zero_matrix(side_size):
     return np.zeros((side_size, side_size), dtype=np.int64)
 
 
-def read_square_matrix(destination_matrix, side_size):
+def read_matrix(side_size):
+    matrix = zero_matrix(side_size)
     for i in range(side_size):
-        line = input().split()
-        destination_matrix[i, :side_size] = line
+        matrix[i] = input().split()
+    return matrix
 
 
 def print_matrix(matrix):
@@ -59,9 +60,9 @@ def strassen(side_size):
         increased_size *= 2
 
     matrix_a = zero_matrix(increased_size)
-    read_square_matrix(matrix_a, side_size)
+    matrix_a[:side_size, :side_size] = read_matrix(side_size)
     matrix_b = zero_matrix(increased_size)
-    read_square_matrix(matrix_b, side_size)
+    matrix_b[:side_size, :side_size] = read_matrix(side_size)
     matrix_res = zero_matrix(increased_size)
 
     multiply_matrices(matrix_res, matrix_a, matrix_b)
