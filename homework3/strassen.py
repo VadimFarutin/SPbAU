@@ -61,20 +61,20 @@ def multiply_matrices(matrix_res, matrix_a, matrix_b):
         matrix_res[half_size:, half_size:] = I + III - II + VI
 
 
-def strassen(m_a, m_b):
-    side_size = m_a.shape[0]
+def strassen(matrix_a, matrix_b):
+    side_size = matrix_a.shape[0]
     increased_size = 2 ** (side_size.bit_length() - 1)
     if increased_size < side_size:
         increased_size *= 2
 
-    dtype = m_a.dtype
-    matrix_a = zero_matrix(increased_size, dtype)
-    matrix_a[:side_size, :side_size] = m_a
-    matrix_b = zero_matrix(increased_size, dtype)
-    matrix_b[:side_size, :side_size] = m_b
+    dtype = matrix_a.dtype
+    resized_a = zero_matrix(increased_size, dtype)
+    resized_a[:side_size, :side_size] = matrix_a
+    resized_b = zero_matrix(increased_size, dtype)
+    resized_b[:side_size, :side_size] = matrix_b
     matrix_res = empty_matrix(increased_size, dtype)
 
-    multiply_matrices(matrix_res, matrix_a, matrix_b)
+    multiply_matrices(matrix_res, resized_a, resized_b)
     return matrix_res[:side_size, :side_size]
 
 
