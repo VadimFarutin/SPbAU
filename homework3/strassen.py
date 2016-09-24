@@ -10,14 +10,10 @@ def empty_matrix(side_size, data_type):
 
 
 def read_matrix(side_size):
-    matrix = []
+    matrix = empty_matrix(side_size, np.dtype(int))
     for i in range(side_size):
-        matrix.append(input().split())
-    if str(float(matrix[0][0])) == matrix[0][0]:
-        data_type = np.dtype(float)
-    else:
-        data_type = np.dtype(int)
-    return np.matrix(matrix, dtype=data_type).reshape(side_size, side_size)
+        matrix[i] = input().split()
+    return matrix
 
 
 def print_matrix(matrix):
