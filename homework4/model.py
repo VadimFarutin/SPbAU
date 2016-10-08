@@ -7,14 +7,14 @@ class Scope:
         self.dict[name] = value
 
     def __getitem__(self, name):
-        if self.dict.get(name, None) is None and self.parent is not None:
+        if name not in self.dict:
             return self.parent[name]
-        return self.dict.get(name, None)
+        return self.dict[name]
 
 
 class Number:
     def __init__(self, value):
-        self.value = int(float(value))
+        self.value = int(value)
 
     def evaluate(self, scope):
         return self
@@ -105,6 +105,20 @@ class Reference:
 
 
 class BinaryOperation:
+    operations = {"+": lambda x, y: x + y,
+                  "-": lambda x, y: x - y,
+                  "*": lambda x, y: x * y,
+                  "/": lambda x, y: x // y,
+                  "%": lambda x, y: x % y,
+                  "==": lambda x, y: x == y,
+                  "!=": lambda x, y: x != y,
+                  "<": lambda x, y: x < y,
+                  ">": lambda x, y: x > y,
+                  "<=": lambda x, y: x <= y,
+                  ">=": lambda x, y: x >= y,
+                  "&&": lambda x, y: x and y,
+                  "||": lambda x, y: x or y}
+
     def __init__(self, lhs, op, rhs):
         self.lhs = lhs
         self.op = op
@@ -113,45 +127,21 @@ class BinaryOperation:
     def evaluate(self, scope):
         left_value = self.lhs.evaluate(scope).value
         right_value = self.rhs.evaluate(scope).value
-        if self.op == "+":
-            value = left_value + right_value
-        elif self.op == "-":
-            value = left_value - right_value
-        elif self.op == "*":
-            value = left_value * right_value
-        elif self.op == "/":
-            value = left_value // right_value
-        elif self.op == "%":
-            value = left_value % right_value
-        elif self.op == "==":
-            value = left_value == right_value
-        elif self.op == "!=":
-            value = left_value != right_value
-        elif self.op == "<":
-            value = left_value < right_value
-        elif self.op == ">":
-            value = left_value > right_value
-        elif self.op == "<=":
-            value = left_value <= right_value
-        elif self.op == ">=":
-            value = left_value >= right_value
-        elif self.op == "&&":
-            value = left_value and right_value
-        else:
-            value = left_value or right_value
+        value = self.operations[self.op](left_value, right_value)
         return Number(value)
 
 
 class UnaryOperation:
+    operations = {"-": lambda x: -x,
+                  "!": lambda x: not x}
+
     def __init__(self, op, expr):
         self.op = op
         self.expr = expr
 
     def evaluate(self, scope):
         value = self.expr.evaluate(scope).value
-        if self.op == "-":
-            return Number(-value)
-        return Number(value == 0)
+        return Number(self.operations[self.op](value))
 
 
 def example():
