@@ -39,7 +39,7 @@ class FunctionDefinition:
 
     def evaluate(self, scope):
         function = self.function
-        if isinstance(self.function, Reference):
+        if not hasattr(self.function, 'args'):
             function = self.function.evaluate(scope)
         scope[self.name] = function
         return function
