@@ -120,9 +120,7 @@ class BinaryOperation:
         elif self.op == "*":
             value = left_value * right_value
         elif self.op == "/":
-            value = left_value / right_value
-            if abs(value) - int(abs(value)) >= 0.5:
-                value = (int(abs(value)) + 1) * (1 if value > 0 else -1)
+            value = left_value // right_value
         elif self.op == "%":
             value = left_value % right_value
         elif self.op == "==":
@@ -174,12 +172,12 @@ def example():
 
 def my_tests():
     main = Scope()
-    main["div"] = UnaryOperation("-", BinaryOperation(Number(30), "/", Number(20))).evaluate(main)
-    print("-(30/20) =", main["div"].value)
-    main["div"] = BinaryOperation(UnaryOperation("-", Number(30)), "/", Number(20)).evaluate(main)
-    print("(-30)/20 =", main["div"].value)
-    main["div"] = BinaryOperation(Number(30), "/", Number(20)).evaluate(main)
-    print("30/20 =", main["div"].value)
+    main["div"] = UnaryOperation("-", BinaryOperation(Number(10), "/", Number(20))).evaluate(main)
+    print("-(10/20) =", main["div"].value)
+    main["div"] = BinaryOperation(UnaryOperation("-", Number(10)), "/", Number(20)).evaluate(main)
+    print("(-10)/20 =", main["div"].value)
+    main["div"] = BinaryOperation(Number(10), "/", Number(20)).evaluate(main)
+    print("10/20 =", main["div"].value)
 
     '''LOG_2'''
     main["abs"] = Function(["value"],
