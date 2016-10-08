@@ -14,7 +14,7 @@ class Scope:
 
 class Number:
     def __init__(self, value):
-        self.value = value
+        self.value = int(float(value))
 
     def evaluate(self, scope):
         return self
@@ -78,7 +78,7 @@ class Read:
         self.name = name
 
     def evaluate(self, scope):
-        number = Number(int(input()))
+        number = Number(input())
         scope[self.name] = number
         return number
 
