@@ -38,11 +38,8 @@ class FunctionDefinition:
         self.function = function
 
     def evaluate(self, scope):
-        function = self.function
-        if not hasattr(self.function, 'args'):
-            function = self.function.evaluate(scope)
-        scope[self.name] = function
-        return function
+        scope[self.name] = self.function
+        return self.function
 
 
 class Conditional:
@@ -190,9 +187,7 @@ def my_tests():
                                                   "<=",
                                                   Reference("n")),
                                           [FunctionCall(
-                                                  FunctionDefinition(
-                                                          "log_2_func",
-                                                          Reference("log_2_func")),
+                                                  Reference("log_2_def"),
                                                   [BinaryOperation(
                                                             Reference("k"),
                                                             "*",
@@ -206,6 +201,7 @@ def my_tests():
                                            ],
                                           [Reference("step")])
                                    ])
+    main["log_2_def"] = FunctionDefinition("log_2_func", main["log_2_func"]).evaluate(main)
     main["print"] = Function(["value"], [Print(Reference("value"))])
     print('LOG_2')
     print(' Print n: ', end=' ')
