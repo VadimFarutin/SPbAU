@@ -10,83 +10,62 @@ class PrettyPrinter:
         tree.visit(self)
         print(';')
 
-    def visitNumber(self, number):
-        print('\t' * self.tab_cnt + str(number.value), end='')
-
-    def visitFunctionDefinition(self, definition):
-        print('\t' * self.tab_cnt + 'def ' + definition.name + '(', end='')
-        print(', '.join(definition.function.args) + ') {')
+    def visitInnerExprs(self, list):
         self.tab_cnt += 1
-        if definition.function.body:
-            for expr in definition.function.body:
+        if list:
+            for expr in list:
+                print('\t' * self.tab_cnt, end='')
                 expr.visit(self)
                 print(';')
         self.tab_cnt -= 1
+
+    def visitNumber(self, number):
+        print(str(number.value), end='')
+
+    def visitFunctionDefinition(self, definition):
+        print('def ' + definition.name + '(', end='')
+        print(', '.join(definition.function.args) + ') {')
+        self.visitInnerExprs(definition.function.body)
         print('\t' * self.tab_cnt + '}', end='')
 
     def visitConditional(self, conditional):
-        print('\t' * self.tab_cnt + 'if (', end='')
-        tabs = self.tab_cnt
-        self.tab_cnt = 0
+        print('if (', end='')
         conditional.condition.visit(self)
-        self.tab_cnt = tabs
         print(') {')
-        self.tab_cnt += 1
-        if conditional.if_true:
-            for expr in conditional.if_true:
-                expr.visit(self)
-                print(';')
-        self.tab_cnt -= 1
+        self.visitInnerExprs(conditional.if_true)
         print('\t' * self.tab_cnt + '} else {')
-        self.tab_cnt += 1
-        if conditional.if_false:
-            for expr in conditional.if_false:
-                expr.visit(self)
-                print(';')
-        self.tab_cnt -= 1
+        self.visitInnerExprs(conditional.if_false)
         print('\t' * self.tab_cnt + '}', end='')
 
     def visitPrint(self, printer):
-        print('\t' * self.tab_cnt + 'print ', end='')
-        tabs = self.tab_cnt
-        self.tab_cnt = 0
+        print('print ', end='')
         printer.expr.visit(self)
-        self.tab_cnt = tabs
 
     def visitRead(self, reader):
-        print('\t' * self.tab_cnt + 'read ' + reader.name, end='')
+        print('read ' + reader.name, end='')
 
     def visitFunctionCall(self, fun_call):
-        print('\t' * self.tab_cnt + fun_call.fun_expr.name + '(', end='')
-        tabs = self.tab_cnt
-        self.tab_cnt = 0
+        print(fun_call.fun_expr.name + '(', end='')
         if fun_call.args:
             fun_call.args[0].visit(self)
             for arg in fun_call.args[1:]:
                 print(', ', end='')
                 arg.visit(self)
-        self.tab_cnt = tabs
         print(')', end='')
 
     def visitReference(self, reference):
-        print('\t' * self.tab_cnt + reference.name, end='')
+        print(reference.name, end='')
 
     def visitBinaryOperation(self, binary):
-        print('\t' * self.tab_cnt + '(', end='')
-        tabs = self.tab_cnt
-        self.tab_cnt = 0
+        print('(', end='')
         binary.lhs.visit(self)
         print(binary.op, end='')
         binary.rhs.visit(self)
-        self.tab_cnt = tabs
         print(')', end='')
 
     def visitUnaryOperation(self, unary):
-        print('\t' * self.tab_cnt + '({}'.format(unary.op), end='')
-        tabs = self.tab_cnt
-        self.tab_cnt = 0
+        print('({}'.format(unary.op), end='')
         unary.expr.visit(self)
-        self.tab_cnt = tabs
         print(')', end='')
 
 

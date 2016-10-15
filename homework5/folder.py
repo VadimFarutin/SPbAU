@@ -2,6 +2,7 @@ from yat.model import Number, Function, FunctionDefinition,\
                   Conditional, Print, Read, FunctionCall,\
                   Reference, BinaryOperation, UnaryOperation
 import yat.printer
+import copy
 
 
 class ConstantFolder:
@@ -11,42 +12,37 @@ class ConstantFolder:
     def visitNumber(self, number):
         return number
 
+    def visitInnerExprs(self, exprs_list):
+        visited_exprs = []
+        if exprs_list:
+            for expr in exprs_list:
+                visited_exprs.append(expr.visit(self))
+        return visited_exprs
+
     def visitFunctionDefinition(self, definition):
-        visited_expr = []
-        if definition.function.body:
-            for expr in definition.function.body:
-                visited_expr.append(expr.visit(self))
-        definition.function.body = visited_expr
-        return definition
+        new_definition = copy.deepcopy(definition)
+        new_definition.function.body = self.visitInnerExprs(definition.function.body)
+        return new_definition
 
     def visitConditional(self, conditional):
-        conditional.condition = conditional.condition.visit(self)
-        visited_expr = []
-        if conditional.if_true:
-            for expr in conditional.if_true:
-                visited_expr.append(expr.visit(self))
-        conditional.if_true = visited_expr
-        visited_expr = []
-        if conditional.if_false:
-            for expr in conditional.if_false:
-                visited_expr.append(expr.visit(self))
-        conditional.if_false = visited_expr
-        return conditional
+        new_conditional = copy.deepcopy(conditional)
+        new_conditional.condition = conditional.condition.visit(self)
+        new_conditional.if_true = self.visitInnerExprs(conditional.if_true)
+        new_conditional.if_false = self.visitInnerExprs(conditional.if_false)
+        return new_conditional
 
     def visitPrint(self, printer):
-        printer.expr = printer.expr.visit(self)
-        return printer
+        new_printer = copy.deepcopy(printer)
+        new_printer.expr = printer.expr.visit(self)
+        return new_printer
 
     def visitRead(self, reader):
         return reader
 
     def visitFunctionCall(self, fun_call):
-        visited_args = []
-        if fun_call.args:
-            for arg in fun_call.args:
-                visited_args.append(arg.visit(self))
-        fun_call.args = visited_args
-        return fun_call
+        new_fun_call = copy.deepcopy(fun_call)
+        new_fun_call.args = self.visitInnerExprs(fun_call.args)
+        return new_fun_call
 
     def visitReference(self, reference):
         return reference
@@ -58,14 +54,14 @@ class ConstantFolder:
             return Number(binary.operations[binary.op](binary.lhs.value,
                                                        binary.rhs.value))
         if isinstance(binary.rhs, Number) and binary.rhs.value == 0 and\
-           isinstance(binary.lhs, Reference) and binary.op is '*':
+           isinstance(binary.lhs, Reference) and binary.op == '*':
             return Number(0)
         if isinstance(binary.lhs, Number) and binary.lhs.value == 0 and\
-           isinstance(binary.rhs, Reference) and binary.op is '*':
+           isinstance(binary.rhs, Reference) and binary.op == '*':
             return Number(0)
         if isinstance(binary.lhs, Reference) and\
            isinstance(binary.rhs, Reference) and\
-           binary.op is '-' and binary.lhs.name is binary.rhs.name:
+           binary.op == '-' and binary.lhs.name == binary.rhs.name:
             return Number(0)
         return binary
 
@@ -147,14 +143,27 @@ def my_tests():
 
     folder = ConstantFolder()
     my_printer = printer.PrettyPrinter()
+
     conditional_c = folder.visit(conditional)
     definition_max3_c = folder.visit(definition_max3)
     fun_call_c = folder.visit(fun_call)
     definition_log2_c = folder.visit(definition_log2)
 
+    if conditional_c == conditional:
+        print('!')
+    if definition_max3_c == definition_max3:
+        print('!')
+    if definition_log2_c == definition_log2:
+        print('!')
+    if fun_call_c == fun_call:
+        print('!')
+
     my_printer.visit(conditional_c)
+    my_printer.visit(conditional)
     my_printer.visit(definition_max3_c)
+    my_printer.visit(definition_max3)
     my_printer.visit(fun_call_c)
+    my_printer.visit(fun_call)
     my_printer.visit(definition_log2_c)
 
 if __name__ == '__main__':
