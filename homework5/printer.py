@@ -17,9 +17,10 @@ class PrettyPrinter:
         print('\t' * self.tab_cnt + 'def ' + definition.name + '(', end='')
         print(', '.join(definition.function.args) + ') {')
         self.tab_cnt += 1
-        for expr in definition.function.body:
-            expr.visit(self)
-            print(';')
+        if definition.function.body:
+            for expr in definition.function.body:
+                expr.visit(self)
+                print(';')
         self.tab_cnt -= 1
         print('\t' * self.tab_cnt + '}', end='')
 
@@ -31,15 +32,17 @@ class PrettyPrinter:
         self.tab_cnt = tabs
         print(') {')
         self.tab_cnt += 1
-        for expr in conditional.if_true:
-            expr.visit(self)
-            print(';')
+        if conditional.if_true:
+            for expr in conditional.if_true:
+                expr.visit(self)
+                print(';')
         self.tab_cnt -= 1
         print('\t' * self.tab_cnt + '} else {')
         self.tab_cnt += 1
-        for expr in conditional.if_false:
-            expr.visit(self)
-            print(';')
+        if conditional.if_false:
+            for expr in conditional.if_false:
+                expr.visit(self)
+                print(';')
         self.tab_cnt -= 1
         print('\t' * self.tab_cnt + '}', end='')
 

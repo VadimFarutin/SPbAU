@@ -3,6 +3,7 @@ from yat.model import Number, Function, FunctionDefinition,\
                   Reference, BinaryOperation, UnaryOperation
 import yat.printer
 
+
 class ConstantFolder:
     def visit(self, tree):
         return tree.visit(self)
@@ -12,20 +13,23 @@ class ConstantFolder:
 
     def visitFunctionDefinition(self, definition):
         visited_expr = []
-        for expr in definition.function.body:
-            visited_expr.append(expr.visit(self))
+        if definition.function.body:
+            for expr in definition.function.body:
+                visited_expr.append(expr.visit(self))
         definition.function.body = visited_expr
         return definition
 
     def visitConditional(self, conditional):
         conditional.condition = conditional.condition.visit(self)
         visited_expr = []
-        for expr in conditional.if_true:
-            visited_expr.append(expr.visit(self))
+        if conditional.if_true:
+            for expr in conditional.if_true:
+                visited_expr.append(expr.visit(self))
         conditional.if_true = visited_expr
         visited_expr = []
-        for expr in conditional.if_false:
-            visited_expr.append(expr.visit(self))
+        if conditional.if_false:
+            for expr in conditional.if_false:
+                visited_expr.append(expr.visit(self))
         conditional.if_false = visited_expr
         return conditional
 
@@ -38,8 +42,9 @@ class ConstantFolder:
 
     def visitFunctionCall(self, fun_call):
         visited_args = []
-        for arg in fun_call.args:
-            visited_args.append(arg.visit(self))
+        if fun_call.args:
+            for arg in fun_call.args:
+                visited_args.append(arg.visit(self))
         fun_call.args = visited_args
         return fun_call
 
@@ -100,15 +105,15 @@ def my_tests():
                                             Reference("a"),
                                             "*",
                                             Number(0)),
-                                    [Reference("a")],
+                                    [],
                                     [Reference("c")])],
                             [Conditional(
                                     BinaryOperation(
                                             Number(0),
                                             "*",
                                             Reference("c")),
-                                    [Reference("c")],
-                                    [Reference("b")])])
+                                    [Reference("c")]
+                                    )])
                       ]))
     fun_call = FunctionCall(
             definition_max3,
