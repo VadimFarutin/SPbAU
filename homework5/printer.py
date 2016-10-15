@@ -73,19 +73,25 @@ class PrettyPrinter:
 
     def visitBinaryOperation(self, binary):
         print('\t' * self.tab_cnt + '(', end='')
+        tabs = self.tab_cnt
+        self.tab_cnt = 0
         binary.lhs.visit(self)
         print(binary.op, end='')
         binary.rhs.visit(self)
+        self.tab_cnt = tabs
         print(')', end='')
 
     def visitUnaryOperation(self, unary):
         print('\t' * self.tab_cnt + '({}'.format(unary.op), end='')
+        tabs = self.tab_cnt
+        self.tab_cnt = 0
         unary.expr.visit(self)
+        self.tab_cnt = tabs
         print(')', end='')
 
 
 def my_tests():
-    reader = Read('n')
+    reader = Print(Read('n'))
     print_binary = Print(
             BinaryOperation(Reference('x'),
                             '/',
@@ -99,7 +105,11 @@ def my_tests():
                                               '<',
                                               UnaryOperation('-',
                                                              Reference('y'))),
-                              [print_binary, print_binary],
+                              [print_binary,
+                               UnaryOperation(
+                                       '-',
+                                       UnaryOperation('!',
+                                                      Reference('s')))],
                               [])
     definition_max3 = FunctionDefinition(
             'max3',
@@ -124,7 +134,7 @@ def my_tests():
                                     [Reference("c")],
                                     [Reference("b")])])
                       ]))
-    fun_call = FunctionCall(definition_max3, [Number(1)])
+    fun_call = Print(FunctionCall(definition_max3, [Number(1), Number(2)]))
     definition_log2 = FunctionDefinition(
             "log2",
             Function(["k", "n", "step"],
