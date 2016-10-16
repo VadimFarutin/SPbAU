@@ -2,7 +2,6 @@ from yat.model import Number, Function, FunctionDefinition,\
                   Conditional, Print, Read, FunctionCall,\
                   Reference, BinaryOperation, UnaryOperation
 import yat.printer
-import copy
 
 
 class ConstantFolder:
@@ -20,29 +19,23 @@ class ConstantFolder:
         return visited_exprs
 
     def visitFunctionDefinition(self, definition):
-        new_definition = copy.deepcopy(definition)
-        new_definition.function.body = self.visitInnerExprs(definition.function.body)
-        return new_definition
+        return FunctionDefinition(definition.name,
+                                  Function(definition.function.args,
+                                           self.visitInnerExprs(definition.function.body)))
 
     def visitConditional(self, conditional):
-        new_conditional = copy.deepcopy(conditional)
-        new_conditional.condition = conditional.condition.visit(self)
-        new_conditional.if_true = self.visitInnerExprs(conditional.if_true)
-        new_conditional.if_false = self.visitInnerExprs(conditional.if_false)
-        return new_conditional
+        return Conditional(conditional.condition.visit(self),
+                           self.visitInnerExprs(conditional.if_true),
+                           self.visitInnerExprs(conditional.if_false))
 
     def visitPrint(self, printer):
-        new_printer = copy.deepcopy(printer)
-        new_printer.expr = printer.expr.visit(self)
-        return new_printer
+        return Print(printer.expr.visit(self))
 
     def visitRead(self, reader):
         return reader
 
     def visitFunctionCall(self, fun_call):
-        new_fun_call = copy.deepcopy(fun_call)
-        new_fun_call.args = self.visitInnerExprs(fun_call.args)
-        return new_fun_call
+        return FunctionCall(fun_call.fun_expr, self.visitInnerExprs(fun_call.args))
 
     def visitReference(self, reference):
         return reference
