@@ -21,5 +21,5 @@ delete x Nil = Nil
 delete x (Cons k v l r) | x == k    = merge l r
                         | x < k     = Cons k v (delete x l) r
                         | otherwise = Cons k v l (delete x r)
-                        where merge x Nil = x
+                        where merge x Nil            = x
                               merge x (Cons k v l r) = Cons k v (merge x l) r
