@@ -5,4 +5,3 @@ select Name, count(Id) MillionaireCount
        on Code = CountryCode
 group by Name
 order by MillionaireCount desc;
-
