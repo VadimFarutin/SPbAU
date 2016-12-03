@@ -1,5 +1,7 @@
-select First.Name, count(Second.Id) Millionaire
-       from Country First left join City Second
-       on First.Code = Second.CountryCode and Second.Population >= 1000000
-group by First.Name
-order by Millionaire desc;
+select Name, count(Id) MillionaireCount
+       from Country left join (select CountryCode, Id
+                                      from City
+                               where Population >= 1000000)
+       on Code = CountryCode
+group by Name
+order by MillionaireCount desc;
