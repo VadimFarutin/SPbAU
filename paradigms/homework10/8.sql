@@ -5,7 +5,7 @@ select Country.Name,
                                         max(City.Population) as MaxPopulation
                                  from Country, City
                                  where Country.Code = City.CountryCode
-							     group by Country.Name) as MaxPopulationCity
+                                 group by Country.Name) as MaxPopulationCity
 where MaxPopulationCity.Code = Country.Code and
       MaxPopulationCity.Code = City.CountryCode and
       City.Id = Capital.CityId and
