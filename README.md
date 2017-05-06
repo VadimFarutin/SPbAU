@@ -1,2 +1,2 @@
 # SPbAU
-SPbAU bachelor homework
+SPbAU bachelor homework and projects
