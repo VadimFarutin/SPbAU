@@ -4,12 +4,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.spbau.farutin.youtrack_test.elements.IssueInfoPageElement;
-import ru.spbau.farutin.youtrack_test.elements.LastIssuePageElement;
 import ru.spbau.farutin.youtrack_test.objects.CreateIssuePageObject;
-import ru.spbau.farutin.youtrack_test.objects.IssuesPageObject;
 import ru.spbau.farutin.youtrack_test.objects.LoginPageObject;
 import ru.spbau.farutin.youtrack_test.objects.MainPageObject;
 
@@ -40,8 +43,13 @@ public class CreateIssueTest {
     }
 
     @Test
-    public void test() {
-        testCreateIssue("summary", "description");
+    public void testSimple() {
+        testSuccess("summary", "description");
+    }
+
+    @Test
+    public void testEmptySummary() {
+        testFail("", "");
     }
 
     private void login() {
@@ -51,15 +59,26 @@ public class CreateIssueTest {
         loginPage.clickLogin();
     }
 
-    private void testCreateIssue(String summary, String description) {
+    private void createIssue(String summary, String description) {
         MainPageObject mainPage = new MainPageObject(webDriver);
         CreateIssuePageObject createIssuePage = mainPage.createIssue();
         createIssuePage.writeSummary(summary);
         createIssuePage.writeDescription(description);
         createIssuePage.clickCreateIssue();
+    }
+
+    private void testSuccess(String summary, String description) {
+        createIssue(summary, description);
 
         IssueInfoPageElement issueInfo = new IssueInfoPageElement(webDriver);
         assertEquals(summary, issueInfo.getSummary());
         assertEquals(description, issueInfo.getDesciption());
+    }
+
+    private void testFail(String summary, String description) {
+        createIssue(summary, description);
+
+        Wait<WebDriver> wait = new WebDriverWait(webDriver, 10);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("error")));
     }
 }
