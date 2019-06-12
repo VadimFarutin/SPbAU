@@ -6,10 +6,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import ru.spbau.farutin.youtrack_test.elements.IssueInfoPageElement;
 import ru.spbau.farutin.youtrack_test.elements.LastIssuePageElement;
 import ru.spbau.farutin.youtrack_test.objects.CreateIssuePageObject;
 import ru.spbau.farutin.youtrack_test.objects.IssuesPageObject;
 import ru.spbau.farutin.youtrack_test.objects.LoginPageObject;
+import ru.spbau.farutin.youtrack_test.objects.MainPageObject;
 
 import static org.junit.Assert.*;
 
@@ -29,10 +31,7 @@ public class CreateIssueTest {
     @Before
     public void setUp() {
         webDriver = new FirefoxDriver();
-        LoginPageObject loginPage = new LoginPageObject(webDriver);
-        loginPage.writeLogin(LOGIN);
-        loginPage.writePassword(PASSWORD);
-        loginPage.clickLogin();
+        login();
     }
 
     @After
@@ -42,17 +41,25 @@ public class CreateIssueTest {
 
     @Test
     public void test() {
-        String summary = "summary";
-        String description = "description";
+        testCreateIssue("summary", "description");
+    }
 
-        IssuesPageObject issuesPage = new IssuesPageObject(webDriver);
-        CreateIssuePageObject createIssuePage = issuesPage.createIssue();
+    private void login() {
+        LoginPageObject loginPage = new LoginPageObject(webDriver);
+        loginPage.writeLogin(LOGIN);
+        loginPage.writePassword(PASSWORD);
+        loginPage.clickLogin();
+    }
+
+    private void testCreateIssue(String summary, String description) {
+        MainPageObject mainPage = new MainPageObject(webDriver);
+        CreateIssuePageObject createIssuePage = mainPage.createIssue();
         createIssuePage.writeSummary(summary);
         createIssuePage.writeDescription(description);
         createIssuePage.clickCreateIssue();
 
-        LastIssuePageElement lastIssue = new LastIssuePageElement(webDriver);
-        assertEquals(summary, lastIssue.getSummary());
-        assertEquals(description, lastIssue.getDesciption());
+        IssueInfoPageElement issueInfo = new IssueInfoPageElement(webDriver);
+        assertEquals(summary, issueInfo.getSummary());
+        assertEquals(description, issueInfo.getDesciption());
     }
 }
