@@ -11,9 +11,9 @@ public class CreateIssuePageObject {
     private ButtonPageElement createIssueButton;
 
     public CreateIssuePageObject(WebDriver webDriver) {
-        summaryText = new TextPageElement(webDriver, By.id("id_l.I.ni.ei.eit.summary"));
-        descriptionText = new TextPageElement(webDriver, By.id("id_l.I.ni.ei.eit.description"));
-        createIssueButton = new ButtonPageElement(webDriver, By.id("id_l.I.ni.ei.submitButton_74_0"));
+        summaryText = new TextPageElement(webDriver, By.id("id_l.D.ni.ei.eit.summary"));
+        descriptionText = new TextPageElement(webDriver, By.id("id_l.D.ni.ei.eit.description"));
+        createIssueButton = new ButtonPageElement(webDriver, By.id("id_l.D.ni.ei.submitButton_74_0"));
     }
 
     public void writeSummary(String summary) {

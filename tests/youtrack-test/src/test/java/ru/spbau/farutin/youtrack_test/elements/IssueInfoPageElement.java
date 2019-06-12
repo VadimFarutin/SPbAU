@@ -9,7 +9,7 @@ public class IssueInfoPageElement {
 
     public IssueInfoPageElement(WebDriver webDriver) {
         summaryText = new TextPageElement(webDriver, By.id("id_l.I.ic.icr.it.issSum"));
-        descriptionText = new TextPageElement(webDriver, By.id("l.I.ic.icr.d.description"));
+        descriptionText = new TextPageElement(webDriver, By.id("id_l.I.ic.icr.d.description"));
     }
 
     public String getSummary() {
