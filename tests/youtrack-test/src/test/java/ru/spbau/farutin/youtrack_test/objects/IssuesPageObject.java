@@ -1,7 +1,8 @@
-package ru.spbau.farutin.youtrack_test;
+package ru.spbau.farutin.youtrack_test.objects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.spbau.farutin.youtrack_test.elements.ButtonPageElement;
 
 public class IssuesPageObject {
     private static final String ISSUES_URL = "http://localhost:8080/issues";

@@ -6,6 +6,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import ru.spbau.farutin.youtrack_test.elements.LastIssuePageElement;
+import ru.spbau.farutin.youtrack_test.objects.CreateIssuePageObject;
+import ru.spbau.farutin.youtrack_test.objects.IssuesPageObject;
+import ru.spbau.farutin.youtrack_test.objects.LoginPageObject;
 
 import static org.junit.Assert.*;
 

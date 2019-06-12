@@ -1,4 +1,4 @@
-package ru.spbau.farutin.youtrack_test;
+package ru.spbau.farutin.youtrack_test.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

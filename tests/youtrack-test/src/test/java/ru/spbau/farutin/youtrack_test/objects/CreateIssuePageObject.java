@@ -1,7 +1,9 @@
-package ru.spbau.farutin.youtrack_test;
+package ru.spbau.farutin.youtrack_test.objects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.spbau.farutin.youtrack_test.elements.ButtonPageElement;
+import ru.spbau.farutin.youtrack_test.elements.TextPageElement;
 
 public class CreateIssuePageObject {
     private TextPageElement summaryText;
