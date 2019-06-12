@@ -13,7 +13,7 @@ import ru.spbau.farutin.youtrack_test.objects.LoginPageObject;
 
 import static org.junit.Assert.*;
 
-public class IssuesTest {
+public class CreateIssueTest {
     private static final String LOGIN = "root";
     private static final String PASSWORD = "password";
     private static final String DRIVER_NAME = "webdriver.firefox.driver";
