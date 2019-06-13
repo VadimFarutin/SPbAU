@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.spbau.farutin.youtrack_test.elements.ErrorPopupPageElement;
 import ru.spbau.farutin.youtrack_test.elements.IssueInfoPageElement;
 import ru.spbau.farutin.youtrack_test.objects.CreateIssuePageObject;
 import ru.spbau.farutin.youtrack_test.objects.LoginPageObject;
@@ -49,7 +50,12 @@ public class CreateIssueTest {
 
     @Test
     public void testEmptySummary() {
-        testFail("", "");
+        testFail("", "description", "Summary is required");
+    }
+
+    @Test
+    public void testEmptySummaryEmptyDescription() {
+        testFail("", "", "Summary is required");
     }
 
     private void login() {
@@ -75,10 +81,10 @@ public class CreateIssueTest {
         assertEquals(description, issueInfo.getDesciption());
     }
 
-    private void testFail(String summary, String description) {
+    private void testFail(String summary, String description, String reason) {
         createIssue(summary, description);
 
-        Wait<WebDriver> wait = new WebDriverWait(webDriver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("error")));
+        ErrorPopupPageElement errorPopup = new ErrorPopupPageElement(webDriver);
+        assertEquals(reason, errorPopup.getError());
     }
 }
